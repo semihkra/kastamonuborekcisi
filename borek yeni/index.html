@@ -1,0 +1,457 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kastamonu Börekçisi - Dijital Menü</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Caveat:wght@600&display=swap" rel="stylesheet">
+    <style>
+        /* Genel Ayarlar */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background-color: #fcf9f5;
+            color: #333;
+            position: relative;
+            min-height: 100vh;
+            padding-bottom: 60px;
+        }
+
+        /* Arka Plan Soluk Logo */
+        body::before {
+            content: "";
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 80vw;
+            height: 80vw;
+            max-width: 400px;
+            max-height: 400px;
+            /* Buraya logonuzun resim linkini koyabilirsiniz */
+            background-image: url('logo.png'); 
+            background-size: contain;
+            background-repeat: no-repeat;
+            background-position: center;
+            opacity: 0.6;
+            z-index: -1;
+        }
+
+        /* Üst Kısım (Header / Navbar) */
+        header {
+            background-color: #ffffff;
+            text-align: center;
+            padding: 20px 15px 15px 15px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        /* Başlık ve El Yazısı Etiketi */
+        .brand-container {
+            display: inline-block;
+            position: relative;
+            margin-bottom: 8px;
+        }
+
+        .meshur-tag {
+            font-family: 'Caveat', cursive;
+            font-size: 26px;
+            color: #d97706; /* Şık ve canlı sıcak turuncu/altın tonu */
+            position: absolute;
+            top: -16px;
+            left: -8px;
+            transform: rotate(-10deg); /* Doğal el yazısı efekti için hafif eğim */
+            white-space: nowrap;
+        }
+
+        header h1 {
+            font-size: 24px;
+            color: #b57c1e;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-top: 10px;
+        }
+
+        .social-buttons a {
+            display: inline-block;
+            margin: 0 8px;
+            color: #555;
+            font-size: 20px;
+            transition: color 0.3s;
+        }
+
+        .social-buttons a:hover {
+            color: #b57c1e;
+        }
+
+        /* Menü Alanı */
+        .menu-container {
+            max-width: 600px;
+            margin: 20px auto;
+            padding: 0 15px;
+        }
+
+        .category-title {
+            font-size: 18px;
+            color: #fff;
+            background-color: #b57c1e;
+            padding: 8px 15px;
+            border-radius: 25px;
+            margin: 25px 0 15px 0;
+            display: inline-block;
+        }
+
+        .menu-item {
+            background: transparent;
+            border-bottom: 1px dashed rgba(181, 124, 30, 0.3);
+            padding: 12px 10px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .item-info {
+            flex: 1;
+            padding-right: 15px;
+        }
+
+        .item-name {
+            font-weight: 700;
+            font-size: 16px;
+            color: #1a1a1a;
+            text-shadow: 0 1px 3px rgba(255,255,255,0.8);
+        }
+
+        .item-desc {
+            font-size: 13px;
+            color: #555;
+            margin-top: 4px;
+            text-shadow: 0 1px 2px rgba(255,255,255,0.7);
+        }
+
+        .item-price {
+            font-weight: bold;
+            font-size: 16px;
+            color: #8a5c00;
+            white-space: nowrap;
+            text-shadow: 0 1px 3px rgba(255,255,255,0.8);
+        }
+
+        /* Sabit WhatsApp Butonu */
+        .whatsapp-btn {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background-color: #25D366;
+            color: white;
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 30px;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+            z-index: 1000;
+            text-decoration: none;
+            transition: transform 0.3s;
+        }
+
+        .whatsapp-btn:hover {
+            transform: scale(1.1);
+        }
+
+        /* Kg Fiyatı Uyarısı */
+        .kg-price-note {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            background: linear-gradient(135deg, #fffbf0, #fef3cd);
+            border: 1px solid #f0c040;
+            border-left: 4px solid #b57c1e;
+            border-radius: 10px;
+            padding: 12px 16px;
+            margin: 10px 0 20px 0;
+            font-size: 14px;
+            color: #7a5200;
+        }
+
+        .kg-price-note .note-icon {
+            font-size: 20px;
+            flex-shrink: 0;
+        }
+
+        .kg-price-note .note-text strong {
+            display: block;
+            font-size: 15px;
+            color: #b57c1e;
+            margin-bottom: 2px;
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <div class="brand-container">
+            <span class="meshur-tag">meşhur</span>
+            <h1>Kastamonu Börekçisi</h1>
+        </div>
+        <div class="social-buttons">
+            <a href="https://instagram.com/kstmnbrkcsi" target="_blank"><i class="fab fa-instagram"></i></a>
+            <a href="https://www.google.com/maps/place/Kastamonu+B%C3%B6rek%C3%A7isi/@40.024193,26.017587,6z/data=!4m10!1m2!2m1!1zS2FzdGFtb251IELDtnJla8OnaXNp!3m6!1s0x14ce43c9aaa7cff9:0x1ccb0601a61fdea3!8m2!3d39.020382!4d31.1509924!15sChVLYXN0YW1vbnUgQsO2cmVrw6dpc2laFyIVa2FzdGFtb251IGLDtnJla8OnaXNpkgEIcGllX3Nob3CaAURDaTlEUVVsUlFVTnZaRU5vZEhsalJqbHZUMnN4VkZVelpESmtNbU13VFd4V2JsVkhiM2hsUkd4aFlUQndNbVZIWXhBQuABAPoBBAgAEDY!16s%2Fg%2F113hsz06t?entry=ttu&g_ep=EgoyMDI2MDgwNC4wIKXMDSoASAFQAw%3D%3D" target="_blank" title="Google Haritalar'da Bul" style="color:#EA4335;"><i class="fas fa-map-marker-alt"></i></a>
+        </div>
+    </header>
+
+    <div class="menu-container">
+        
+        <div class="category-title">Börek Çeşitleri</div>
+        
+        <div class="menu-item">
+            <div class="item-info">
+                <div class="item-name">Kıymalı Kol Böreği</div>
+            </div>
+            <div class="item-price">120 TL</div>
+        </div>
+
+        <div class="menu-item">
+            <div class="item-info">
+                <div class="item-name">Peynirli Kol Böreği</div>
+            </div>
+            <div class="item-price">120 TL</div>
+        </div>
+
+        <div class="menu-item">
+            <div class="item-info">
+                <div class="item-name">Patatesli Kol Böreği</div>
+            </div>
+            <div class="item-price">120TL</div>
+        </div>
+        <div class="menu-item">
+            <div class="item-info">
+                <div class="item-name"> Ispanaklı Kol Böreği</div>
+            </div>
+            <div class="item-price">120TL</div>
+        </div>
+        <div class="menu-item">
+            <div class="item-info">
+                <div class="item-name">Su Böreği</div>
+            </div>
+            <div class="item-price">120TL</div>
+        </div>
+        <div class="menu-item">
+            <div class="item-info">
+                <div class="item-name">Küt Böreği</div>
+            </div>
+            <div class="item-price">120TL</div>
+        </div>
+
+        <div class="kg-price-note">
+            <span class="note-icon">⚖️</span>
+            <div class="note-text">
+                <strong>Kg Fiyatı: 480 TL</strong>
+                Böreklerimiz kilogram olarak da satılmaktadır.
+            </div>
+        </div>
+        <div class="category-title">Bükme Çeşitleri</div>
+        
+        <div class="menu-item">
+            <div class="item-info">
+                <div class="item-name">Mercimekli Bükme</div>
+            </div>
+            <div class="item-price">20 TL</div>
+        </div>
+
+        <div class="menu-item">
+            <div class="item-info">
+                <div class="item-name">Peynirli Bükme</div>
+            </div>
+            <div class="item-price">20 TL</div>
+        </div>
+
+        <div class="menu-item">
+            <div class="item-info">
+                <div class="item-name">Patatesli Bükme</div>
+            </div>
+            <div class="item-price">20 TL</div>
+        </div>
+        <div class="category-title">Poğaça Çeşitleri</div>
+        
+        <div class="menu-item">
+            <div class="item-info">
+                <div class="item-name">Kaşarlı Poğaça</div>
+            </div>
+            <div class="item-price">20 TL</div>
+        </div>
+
+        <div class="menu-item">
+            <div class="item-info">
+                <div class="item-name">Peynirli Poğaça</div>
+            </div>
+            <div class="item-price">20 TL</div>
+        </div>
+
+        <div class="menu-item">
+            <div class="item-info">
+                <div class="item-name">Zeytinli Poğaça</div>
+            </div>
+            <div class="item-price">20 TL</div>
+        </div>
+        <div class="menu-item">
+            <div class="item-info">
+                <div class="item-name">Patatesli Poğaça</div>
+            </div>
+            <div class="item-price">20 TL</div>
+        </div>
+        <div class="menu-item">
+            <div class="item-info">
+                <div class="item-name">Sade Poğaça</div>
+            </div>
+            <div class="item-price">20 TL</div>
+        </div>
+        <div class="category-title">Açma Çeşitleri</div>
+
+        <div class="menu-item">
+            <div class="item-info">
+                <div class="item-name">Peynirli Açma</div>
+            </div>
+            <div class="item-price">20 TL</div>
+        </div>
+
+        <div class="menu-item">
+            <div class="item-info">
+                <div class="item-name">Zeytinli Açma</div>
+            </div>
+            <div class="item-price">20 TL</div>
+        </div>
+        <div class="menu-item">
+            <div class="item-info">
+                <div class="item-name">Patatesli Açma</div>
+            </div>
+            <div class="item-price">20 TL</div>
+        </div>
+        <div class="menu-item">
+            <div class="item-info">
+                <div class="item-name">Sade Açma</div>
+            </div>
+            <div class="item-price">20 TL</div>
+        </div>
+        <div class="menu-item">
+            <div class="item-info">
+                <div class="item-name">Sosis Kaşarlı Açma</div>
+            </div>
+            <div class="item-price">20 TL</div>
+        </div>
+        <div class="menu-item">
+            <div class="item-info">
+                <div class="item-name">Haşhaşlı Açma</div>
+            </div>
+            <div class="item-price">20 TL</div>
+        </div>
+        <div class="menu-item">
+            <div class="item-info">
+                <div class="item-name">Çikolatalı Açma</div>
+            </div>
+            <div class="item-price">20 TL</div>
+        </div>
+        <div class="menu-item">
+            <div class="item-info">
+                <div class="item-name">Tahinli Açma</div>
+            </div>
+            <div class="item-price">20 TL</div>
+        </div>
+        <div class="menu-item">
+            <div class="item-info">
+                <div class="item-name">Kıymalı Açma</div>
+            </div>
+            <div class="item-price">20 TL</div>
+        </div>
+        <div class="menu-item">
+            <div class="item-info">
+                <div class="item-name">Sandviç Çeşitleri</div>
+            </div>
+            <div class="item-price">40 TL</div>
+
+        </div>
+         <div class="category-title">Pide Çeşitleri</div>
+        
+        <div class="menu-item">
+            <div class="item-info">
+                <div class="item-name">Kıymalı Kır Pidesi</div>
+            </div>
+            <div class="item-price">60 TL</div>
+        </div>
+         <div class="menu-item">
+            <div class="item-info">
+                <div class="item-name">Peynirli Kır Pidesi</div>
+            </div>
+            <div class="item-price">60 TL</div>
+        </div>
+         <div class="menu-item">
+            <div class="item-info">
+                <div class="item-name">Patatesli Kır Pidesi</div>
+            </div>
+            <div class="item-price">60 TL</div>
+        </div>
+
+        <div class="category-title">İçecekler</div>
+        
+        <div class="menu-item">
+            <div class="item-info">
+                <div class="item-name">Küçük Çay</div>
+            </div>
+            <div class="item-price">10 TL</div>
+        </div>
+
+        <div class="menu-item">
+            <div class="item-info">
+                <div class="item-name">Büyük Çay</div>
+            </div>
+            <div class="item-price">20 TL</div>
+        </div>
+        <div class="menu-item">
+            <div class="item-info">
+                <div class="item-name">Ayran</div>
+            </div>
+            <div class="item-price">20 TL</div>
+        </div>
+        <div class="menu-item">
+            <div class="item-info">
+                <div class="item-name">Meyve Suyu Çeşitleri(200ml)</div>
+            </div>
+            <div class="item-price">25 TL</div>
+        </div>
+        <div class="menu-item">
+            <div class="item-info">
+                <div class="item-name">Cam Şişe İçecekler</div>
+            </div>
+            <div class="item-price">60 TL</div>
+        </div>
+        <div class="menu-item">
+            <div class="item-info">
+                <div class="item-name">Kutu İçecekler</div>
+            </div>
+            <div class="item-price">80 TL</div>
+        </div>
+        <div class="menu-item">
+            <div class="item-info">
+                <div class="item-name">Su</div>
+            </div>
+            <div class="item-price">15 TL</div>
+        </div>
+
+    </div>
+
+    <a href="https://wa.me/905388703373" class="whatsapp-btn" target="_blank">
+        <i class="fab fa-whatsapp"></i>
+    </a>
+
+</body>
+</html>
